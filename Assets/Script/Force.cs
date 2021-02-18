@@ -50,6 +50,10 @@ public class Force : MonoBehaviour
         eixoHorizontal = Input.GetAxis("Horizontal");
         eixoVertical = Input.GetAxis("Vertical");
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            velocidade2 = eixoVertical++2;
+        }
 
         //criar objeto Vector3 com os valores dos inputs
         Vector3 vetor = new Vector3(eixoHorizontal, 0.0f, eixoVertical);
@@ -62,10 +66,7 @@ public class Force : MonoBehaviour
          
         info.text = mensagem + msg;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            velocidade2 = 10;
-        }
+
 
     }
 
