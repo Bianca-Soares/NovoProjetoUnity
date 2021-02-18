@@ -8,6 +8,8 @@ TagManager:
   - Bonus
   - Star
   - Veloci
+  - ParedeLateral
+  - ParedeFim
   layers:
   - Default
   - TransparentFX

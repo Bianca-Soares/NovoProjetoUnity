@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Force : MonoBehaviour
 {
+    public Reiniciar telaReiniciar;
 
     // ref-> referência do componete para movimentar o heroi
     private Rigidbody refRigidbody;
@@ -13,11 +14,13 @@ public class Force : MonoBehaviour
     private float eixoVertical;
     //valor para coordenada de x
     private float eixoHorizontal;
+    private float velocidade2;
 
     [SerializeField] public float velocidade = .0f;
     private string mensagem;
     private string msg;
-    private int vida = 5;
+    private string textVelocidade;
+
     private int bonus = 0;
     private int danos = 0;
     Vector3 posiInicial;
@@ -28,7 +31,7 @@ public class Force : MonoBehaviour
         refRigidbody = GetComponent<Rigidbody>();//a ref recebeu o rigidbody do heroi
 
         posiInicial = transform.position;//Editar para posição inicial
-        mensagem = "Início";
+        mensagem = " Início";
 
         info.text = mensagem;
     }
@@ -47,16 +50,22 @@ public class Force : MonoBehaviour
         eixoHorizontal = Input.GetAxis("Horizontal");
         eixoVertical = Input.GetAxis("Vertical");
 
+
         //criar objeto Vector3 com os valores dos inputs
         Vector3 vetor = new Vector3(eixoHorizontal, 0.0f, eixoVertical);
 
         //adicionar força para o movimento
         refRigidbody.AddForce(vetor * velocidade);//mais velocidade 
 
-        msg = "\n Danos: " + danos.ToString() + "\n Bonus: " + bonus.ToString();
+        msg = "\n Danos: " + danos.ToString()+" % " + "\n Bonus: " + bonus.ToString();
        
          
         info.text = mensagem + msg;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            velocidade2 = 10;
+        }
 
     }
 
@@ -65,12 +74,12 @@ public class Force : MonoBehaviour
 
         if (other.gameObject.CompareTag("Veloci"))
         {
-            mensagem = "Ganhou Bônus";
+            mensagem = " Ganhou Bônus";
            
             other.gameObject.SetActive(false);
             bonus = bonus + 10;
         }
-        
+
     }
 
 
@@ -78,22 +87,36 @@ public class Force : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Star"))
         {
-            mensagem = "Recebe danos";
+            mensagem = " Levou danos";
             
 
             danos = danos + 5;
             
-            
-            if (danos >= 20)
-            {
-                mensagem = "Fim de Jogo";
-                msg = "\nDanos: " + danos.ToString() + "\nBonus: " + bonus.ToString();
-                info.text = mensagem + msg;
-                this.gameObject.SetActive(false);
-                
-            }
         }
 
+        if (collision.gameObject.CompareTag("ParedeLateral"))
+        {
+            mensagem = " Levou danos";
+
+            danos = danos + 2;
+        }
+
+        if (collision.gameObject.CompareTag("ParedeFim"))
+        {
+            mensagem = " Levou danos";
+
+            danos = danos + 10;
+        }
+
+        if (danos >= 100)
+        {
+            mensagem = " Fim de Jogo";
+            msg = "\nDanos 100 % " + "\nBonus: " + bonus.ToString();
+            info.text = mensagem + msg;
+            this.gameObject.SetActive(false);
+
+            telaReiniciar.Exibir(bonus);
+        }
     }
 
     private void inicio()
